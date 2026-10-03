@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Detetive dos Números & O Enigma dos Rebuçados</title>
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #e8effd 100%);
+      --primary: #00a8e8;
+      --primary-dark: #0077b6;
+      --yellow-border: #ffca28;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1, h2, h3, .brand-font {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HEADER COM MOLDURA AMARELA */
+    header {
+      background: white;
+      padding: 16px 24px;
+      border-radius: 24px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border: 3.5px solid var(--yellow-border);
+      flex-wrap: wrap;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .detective-avatar {
+      width: 58px;
+      height: 58px;
+      background: #fef08a;
+      border: 3px solid #f59e0b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .header-text-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tags-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag-blue {
+      background: #e0f2fe;
+      color: #0284c7;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-yellow {
+      background: #fef3c7;
+      color: #b45309;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-text-block h1 {
+      font-size: 26px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.1;
+    }
+
+    .header-text-block p {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Tabs Integradas */
+    .header-tabs-nav {
+      display: flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 16px;
+      gap: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      color: #0284c7;
+    }
+
+    .tab-btn.active {
+      background: #00a8e8;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 168, 232, 0.3);
+    }
+
+    /* Section Views */
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Controls Panel */
+    .controls-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 22px 25px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 25px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .controls-title {
+      font-size: 17px;
+      color: var(--primary-dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controls-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .quick-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .num-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 2px solid #f1f5f9;
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .num-btn:hover {
+      border-color: var(--primary);
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .num-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 168, 232, 0.3);
+    }
+
+    /* Laboratório de Exploração para Outros Números */
+    .exploration-box {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 10px;
+    }
+
+    .exploration-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .custom-input-group {
+      display: flex;
+      gap: 10px;
+      max-width: 500px;
+    }
+
+    .custom-input-group input {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .custom-input-group input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-action {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Selection Summary */
+    .selection-summary {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px 25px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-left: 6px solid var(--primary);
+    }
+
+    .summary-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .summary-info h2 {
+      font-size: 22px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .summary-info p {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    /* Symbolic Notation Box */
+    .symbolic-notation-box {
+      width: 100%;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .symbolic-notation-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0284c7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .symbolic-notation-value {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: #0369a1;
+      letter-spacing: 1px;
+    }
+
+    .classification-tag {
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-primo {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .tag-composto {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .tag-especial {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #e9d5ff;
+    }
+
+    /* Jar Display Grid */
+    .jar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .jar-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .jar-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .jar-card-header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px dashed #f1f5f9;
+    }
+
+    .jar-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .jar-card-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* SVG Glass Jar Styling */
+    .jar-svg-container {
+      width: 100%;
+      max-width: 180px;
+      height: 200px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px 0;
+    }
+
+    .jar-wrapper {
+      width: 140px;
+      height: 190px;
+      position: relative;
+    }
+
+    .jar-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.05));
+    }
+
+    .candies-inside-container {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      top: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-end;
+      justify-content: center;
+      gap: 4px;
+      padding: 6px;
+      overflow: hidden;
+      border-radius: 0 0 14px 14px;
+    }
+
+    .candy-item {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.15);
+      animation: candyPop 0.3s ease-out forwards;
+      position: relative;
+    }
+
+    .candy-item::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+    }
+
+    @keyframes candyPop {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Matrix View */
+    .matrix-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      min-width: 680px;
+    }
+
+    .matrix-table th, .matrix-table td {
+      border: 1px solid #e2e8f0;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .matrix-table th {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .matrix-table th.col-header-num {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .matrix-table td.row-divisor-num {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .matrix-cell-active {
+      background: #dbeafe !important;
+      color: #1e40af;
+      font-size: 15px;
+    }
+
+    .matrix-cell-empty {
+      color: #cbd5e1;
+    }
+
+    .matrix-cell-above-diag {
+      background: #fef2f2;
+      color: #fca5a5;
+    }
+
+    .matrix-legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    /* SCRATCH SIMULATOR ESTILO EXACTO DOS BLOCOS */
+    .scratch-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid #e2e8f0;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+    }
+
+    @media (max-width: 850px) {
+      .scratch-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scratch-code-display {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 13.5px;
+    }
+
+    /* Cores fiéis aos blocos do Scratch em Português */
+    .sb-block {
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: white;
+      display: inline-block;
+      margin: 2px 0;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+    }
+
+    .sb-events { background: #ffbf00; color: #333; }
+    .sb-sensing { background: #4cbfd6; }
+    .sb-variables { background: #ff8c1a; }
+    .sb-control { background: #ffab00; }
+    .sb-operators { background: #59c059; }
+    .sb-looks { background: #9966ff; }
+
+    .sb-indent-1 { margin-left: 20px; }
+    .sb-indent-2 { margin-left: 40px; }
+
+    .scratch-execution-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .scratch-log {
+      background: #1e293b;
+      color: #38bdf8;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      height: 280px;
+      overflow-y: auto;
+      font-size: 13px;
+      font-family: monospace;
+      margin-bottom: 12px;
+      border: 2px solid #0284c7;
+    }
+
+    .log-entry {
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #334155;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      padding: 20px 0 10px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <div class="detective-avatar">
+          🕵️‍♀️
+        </div>
+        <div class="header-text-block">
+          <div class="tags-row">
+            <span class="tag-blue">MATEMÁTICA • 5.º ANO</span>
+            <span class="tag-yellow">CONGRESSO MATEMÁTICO</span>
+          </div>
+          <h1>A Detetive dos Números 🍬</h1>
+          <p>O Enigma dos Frascos de Rebuçados & A Missão dos Divisores</p>
+        </div>
+      </div>
+
+      <!-- Navegação de Tabs Integrada -->
+      <div class="header-tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('jarsView')">
+          <i class="fa-solid fa-jar"></i> Tarefa 1: Frascos
+        </button>
+        <button class="tab-btn" onclick="switchTab('matrixView')">
+          <i class="fa-solid fa-table-cells"></i> Tarefa 2: Matriz (1-20)
+        </button>
+        <button class="tab-btn" onclick="switchTab('scratchView')">
+          <i class="fa-solid fa-laptop-code"></i> Missão Scratch
+        </button>
+      </div>
+    </header>
+
+    <!-- TAB 1: Jars View -->
+    <div id="jarsView" class="view-section active">
+      <!-- Controls -->
+      <div class="controls-card">
+        <div class="controls-title">
+          <i class="fa-solid fa-magnifying-glass"></i> Escolher a Quantidade de Rebuçados
+        </div>
+        <div class="controls-subtitle">
+          Seleciona um botão rápido ou digita outro número para investigares
+        </div>
+
+        <div class="quick-numbers" id="quickNumbersContainer"></div>
+
+        <!-- Laboratório de Exploração para Outros Números -->
+        <div class="exploration-box">
+          <div class="exploration-title">
+            <i class="fa-solid fa-vial-circle-check"></i> Laboratório da Detetive (Explora Outros Números)
+          </div>
+          <div class="custom-input-group">
+            <input type="number" id="customInputNumber" placeholder="Escreve outro número (ex: 29, 2026, 185)..." min="1" max="10000">
+            <button class="btn-action" onclick="analyzeCustomNumber()">
+              <i class="fa-solid fa-flask"></i> Investigar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selection Summary -->
+      <div class="selection-summary">
+        <div class="summary-top-row">
+          <div class="summary-info">
+            <h2>
+              <span id="summaryNumber">12</span> Rebuçados 🍬
+            </h2>
+            <p id="summaryDivisorsText">Possui 6 formas de arrumar em frascos iguais sem sobrar nenhum.</p>
+          </div>
+          <div id="summaryClassificationBadge" class="classification-tag tag-composto">
+            🧩 Número Composto
+          </div>
+        </div>
+
+        <!-- Notação Simbólica em Destaque -->
+        <div class="symbolic-notation-box">
+          <div class="symbolic-notation-label">Notação Simbólica:</div>
+          <div class="symbolic-notation-value" id="symbolicNotationText">
+            D<sub>12</sub> = { 1, 2, 3, 4, 6, 12 }
+          </div>
+        </div>
+      </div>
+
+      <!-- Jars Grid -->
+      <div class="jar-grid" id="jarCardsGrid"></div>
+    </div>
+
+    <!-- TAB 2: Matrix View -->
+    <div id="matrixView" class="view-section">
+      <div class="matrix-card">
+        <div class="controls-title">
+          <i class="fa-solid fa-border-all"></i> Matriz de Divisores de 1 a 20
+        </div>
+        <div class="controls-subtitle">
+          Explora as colunas e descobre os padrões das experiências da Ana (Tarefa 2)
+        </div>
+
+        <table class="matrix-table" id="matrixTable"></table>
+
+        <div class="matrix-legend">
+          <div class="legend-item">
+            <div class="legend-box" style="background:#dbeafe; border-color:#3b82f6;"></div>
+            <span>Divisor Válido (Divisão Exata)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background:#fef2f2; border-color:#fca5a5;"></div>
+            <span>Acima da Diagonal (Impossível ser divisor - Afirmação da Ana)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Scratch Simulator Fiel ao Bloco da Foto -->
+    <div id="scratchView" class="view-section">
+      <div class="scratch-card">
+        <div>
+          <div class="controls-title" style="margin-bottom:15px;">
+            <i class="fa-solid fa-puzzle-piece"></i> Código do Programa Scratch
+          </div>
+          <div class="scratch-code-display">
+            <div><span class="sb-block sb-events">Quando alguém clicar em 🚩</span></div>
+            <div><span class="sb-block sb-sensing">pergunta "Olá! Precisas de ajuda para saber se um número n..." e espera</span></div>
+            <div><span class="sb-block sb-sensing">pergunta "Escreve o número." e espera</span></div>
+            <div><span class="sb-block sb-variables">altera [Número] para (resposta)</span></div>
+            <div><span class="sb-block sb-variables">altera [Divisor] para 0</span></div>
+            <div><span class="sb-block sb-variables">altera [Contador de divisores] para 0</span></div>
+            <div><span class="sb-block sb-control">repete (Número) vezes</span></div>
+            <div class="sb-indent-1"><span class="sb-block sb-variables">adiciona a [Divisor] o valor 1</span></div>
+            <div class="sb-indent-1"><span class="sb-block sb-control">se <span class="sb-block sb-operators" style="padding:2px 6px; margin:0;">(o resto de (Número) a dividir por (Divisor) = 0)</span> então</span></div>
+            <div class="sb-indent-2"><span class="sb-block sb-variables">adiciona a [Contador de divisores] o valor 1</span></div>
+            <div><span class="sb-block sb-control">se <span class="sb-block sb-operators" style="padding:2px 6px; margin:0;">(Contador de divisores = 2)</span> então</span></div>
+            <div class="sb-indent-1"><span class="sb-block sb-looks">diz "É um número primo, pois tem apenas dois divisores." durante 5 s</span></div>
+            <div><span class="sb-block sb-control">senão</span></div>
+            <div class="sb-indent-1"><span class="sb-block sb-looks">diz "O número é composto, pois tem mais do que dois d..." durante 5 s</span></div>
+          </div>
+        </div>
+
+        <div class="scratch-execution-panel">
+          <div>
+            <div class="controls-title" style="margin-bottom:10px;">
+              <i class="fa-solid fa-play"></i> Testar o Teu Programa Scratch
+            </div>
+            <div class="controls-subtitle">
+              Simula a pergunta "Escreve o número." para qualquer valor
+            </div>
+            
+            <div class="custom-input-group" style="margin-bottom:12px; max-width:100%;">
+              <input type="number" id="scratchTestNumber" value="2026" placeholder="Escreve um número à escolha...">
+              <button class="btn-action" onclick="runScratchSimulation()">
+                <i class="fa-solid fa-play"></i> Executar
+              </button>
+            </div>
+
+            <div class="scratch-log" id="scratchLog">
+              Prime em "Executar" para veres o teu programa Scratch a testar o número introduzido...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Geral -->
+    <footer>
+      Escola Básica dos 2.º e 3.º Ciclos de Álvaro Velho • Professora Fátima Lopes
+    </footer>
+  </div>
+
+  <script>
+    const candyColors = [
+      '#f72585', '#4cc9f0', '#7209b7', '#4361ee', 
+      '#fb8500', '#2ec4b6', '#ffb703', '#e63946'
+    ];
+
+    let currentSelectedNumber = 12;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderQuickNumberButtons();
+      selectNumber(12);
+      buildMatrixTable();
+    });
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function renderQuickNumberButtons() {
+      const container = document.getElementById('quickNumbersContainer');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= 20; i++) {
+        const btn = document.createElement('button');
+        btn.className = `num-btn ${i === currentSelectedNumber ? 'active' : ''}`;
+        btn.innerText = i;
+        btn.onclick = () => selectNumber(i);
+        container.appendChild(btn);
+      }
+    }
+
+    function selectNumber(num) {
+      currentSelectedNumber = num;
+      
+      document.querySelectorAll('.num-btn').forEach(btn => {
+        if (parseInt(btn.innerText) === num) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const divisors = getDivisors(num);
+      updateSummary(num, divisors);
+      renderJarGrid(num, divisors);
+    }
+
+    function analyzeCustomNumber() {
+      const val = parseInt(document.getElementById('customInputNumber').value);
+      if (val && val > 0) {
+        selectNumber(val);
+      }
+    }
+
+    function getDivisors(n) {
+      const divs = [];
+      for (let i = 1; i <= n; i++) {
+        if (n % i === 0) divs.push(i);
+      }
+      return divs;
+    }
+
+    function updateSummary(num, divisors) {
+      document.getElementById('summaryNumber').innerText = num;
+      document.getElementById('summaryDivisorsText').innerText = 
+        `Possui ${divisors.length} forma(s) de arrumar em frascos iguais.`;
+
+      document.getElementById('symbolicNotationText').innerHTML = 
+        `D<sub>${num}</sub> = { ${divisors.join(', ')} }`;
+
+      const badge = document.getElementById('summaryClassificationBadge');
+      if (num === 1) {
+        badge.className = 'classification-tag tag-especial';
+        badge.innerHTML = '⭐ Caso Especial (1 Divisor)';
+      } else if (divisors.length === 2) {
+        badge.className = 'classification-tag tag-primo';
+        badge.innerHTML = '🥇 Número Primo (Exatamente 2 Divisores)';
+      } else {
+        badge.className = 'classification-tag tag-composto';
+        badge.innerHTML = '🧩 Número Composto (Mais de 2 Divisores)';
+      }
+    }
+
+    function renderJarGrid(num, divisors) {
+      const grid = document.getElementById('jarCardsGrid');
+      grid.innerHTML = '';
+
+      divisors.forEach(div => {
+        const candiesPerJar = num / div;
+        
+        const card = document.createElement('div');
+        card.className = 'jar-card';
+
+        const header = document.createElement('div');
+        header.className = 'jar-card-header';
+        header.innerHTML = `
+          <div class="jar-card-title">${div} Frasco(s)</div>
+          <div class="jar-card-subtitle">com ${candiesPerJar} rebuçado(s) cada (${div} × ${candiesPerJar} = ${num})</div>
+        `;
+
+        const svgContainer = document.createElement('div');
+        svgContainer.className = 'jar-svg-container';
+
+        let candiesHTML = '';
+        const displayCandyCount = Math.min(candiesPerJar, 40);
+        for (let c = 0; c < displayCandyCount; c++) {
+          const randomColor = candyColors[c % candyColors.length];
+          candiesHTML += `<span class="candy-item" style="background:${randomColor};"></span>`;
+        }
+
+        svgContainer.innerHTML = `
+          <div class="jar-wrapper">
+            <svg class="jar-svg" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="45" y="10" width="60" height="15" rx="3" fill="#d4a373" stroke="#bc8a5f" stroke-width="2"/>
+              <rect x="50" y="25" width="50" height="15" fill="rgba(255,255,255,0.4)" stroke="#94a3b8" stroke-width="2"/>
+              <path d="M 25 50 C 25 40, 40 40, 50 40 L 100 40 C 110 40, 125 40, 125 50 L 125 180 C 125 190, 115 195, 100 195 L 50 195 C 35 195, 25 190, 25 180 Z" 
+                    fill="rgba(240, 249, 255, 0.4)" stroke="#94a3b8" stroke-width="3"/>
+              <path d="M 35 55 L 35 175" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+            <div class="candies-inside-container">
+              ${candiesHTML}
+            </div>
+          </div>
+        `;
+
+        card.appendChild(header);
+        card.appendChild(svgContainer);
+        grid.appendChild(card);
+      });
+    }
+
+    function buildMatrixTable() {
+      const table = document.getElementById('matrixTable');
+      table.innerHTML = '';
+
+      let headerRow = '<tr><th>Divisor \\ Número</th>';
+      for (let num = 1; num <= 20; num++) {
+        headerRow += `<th class="col-header-num">${num}</th>`;
+      }
+      headerRow += '</tr>';
+      table.innerHTML += headerRow;
+
+      for (let div = 1; div <= 20; div++) {
+        let row = `<tr><td class="row-divisor-num">${div}</td>`;
+        for (let num = 1; num <= 20; num++) {
+          if (div > num) {
+            row += `<td class="matrix-cell-above-diag">-</td>`;
+          } else if (num % div === 0) {
+            row += `<td class="matrix-cell-active">✓</td>`;
+          } else {
+            row += `<td class="matrix-cell-empty"></td>`;
+          }
+        }
+        row += '</tr>';
+        table.innerHTML += row;
+      }
+    }
+
+    // SIMULAÇÃO SCRATCH COM AS FRASES EXATAS DO SEU CÓDIGO
+    function runScratchSimulation() {
+      const targetNum = parseInt(document.getElementById('scratchTestNumber').value) || 2026;
+      const log = document.getElementById('scratchLog');
+      log.innerHTML = '';
+
+      function addLog(text) {
+        log.innerHTML += `<div class="log-entry">${text}</div>`;
+        log.scrollTop = log.scrollHeight;
+      }
+
+      addLog("🚩 Clique em Bandeira Verde!");
+      addLog("💬 Pergunta: Olá! Precisas de ajuda para saber se um número é primo?");
+      addLog(`💬 Resposta inserida: ${targetNum}`);
+      addLog(`📌 Número = ${targetNum}`);
+      addLog("📌 Divisor = 0 | Contador de divisores = 0");
+
+      setTimeout(() => {
+        addLog(`🔄 A executar o ciclo: repete ${targetNum} vezes...`);
+      }, 400);
+
+      setTimeout(() => {
+        const divs = getDivisors(targetNum);
+        addLog(`✅ Divisores de ${targetNum} encontrados: ${divs.join(', ')}`);
+        addLog(`📊 Contador de divisores final = ${divs.length}`);
+      }, 1000);
+
+      setTimeout(() => {
+        addLog("❓ Se Contador de divisores = 2 então:");
+        if (targetNum === 1) {
+          addLog("💬 Scratch diz (5s): O número é composto, pois tem mais do que dois divisores (ou menos).");
+        } else if (getDivisors(targetNum).length === 2) {
+          addLog("💬 Scratch diz (5s): <b>'É um número primo, pois tem apenas dois divisores.'</b>");
+        } else {
+          addLog("💬 Scratch diz (5s): <b>'O número é composto, pois tem mais do que dois divisores.'</b>");
+        }
+      }, 1600);
+    }
+  </script>
+</body>
+</html>
